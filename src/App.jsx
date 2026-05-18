@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowRightLeft, Copy, Trash2, Languages, ArrowDownUp, Sparkles, Check, Volume2 } from 'lucide-react';
 
 const translatorMapping = {
@@ -15,7 +15,6 @@ const reverseMapping = Object.fromEntries(
 
 export default function App() {
   const [sourceText, setSourceText] = useState('');
-  const [translatedText, setTranslatedText] = useState('');
   const [isEnglishToExperimental, setIsEnglishToExperimental] = useState(true);
   const [sourceCopied, setSourceCopied] = useState(false);
   const [targetCopied, setTargetCopied] = useState(false);
@@ -28,15 +27,8 @@ export default function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    translate(sourceText, isEnglishToExperimental);
-  }, [sourceText, isEnglishToExperimental]);
-
-  const translate = (text, toExperimental) => {
-    if (!text) {
-      setTranslatedText('');
-      return;
-    }
+  function translate(text, toExperimental) {
+    if (!text) return '';
 
     let result = '';
     for (let char of text) {
@@ -57,8 +49,10 @@ export default function App() {
       }
     }
     
-    setTranslatedText(result);
-  };
+    return result;
+  }
+
+  const translatedText = translate(sourceText, isEnglishToExperimental);
 
   const handleSwap = () => {
     setIsEnglishToExperimental(!isEnglishToExperimental);
